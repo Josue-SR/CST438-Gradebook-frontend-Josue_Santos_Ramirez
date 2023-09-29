@@ -79,3 +79,49 @@ input:focus {
   outline: 1px solid #ccc;
   border: 1px solid #ccc;
 }
+
+button:hover {
+  color: #8e8787;
+}
+
+#saveButton {
+  background: limegreen;
+  color: white;
+  border: 1px solid #eeeeee;
+  border-radius: 5px;
+}
+
+#saveButton:hover {
+  background-color: rgb(13, 184, 13);
+}
+
+#deleteButton {
+  background: red;
+  color: white;
+  border: 1px solid #eeeeee;
+  border-radius: 5px;
+}
+
+#deleteButton:hover {
+  background-color: rgb(205, 10, 10);
+}
+
+.link-style-grade, .link-style-edit {
+  text-decoration: none;
+}
+
+.link-style-edit {
+  color: rgb(3, 205, 54)
+}
+
+.link-style-edit:hover {
+  color: rgb(3, 161, 42)
+}
+
+.link-style-grade {
+  color: rgb(0, 128, 255);
+}
+
+.link-style-grade:hover {
+  color: rgb(0, 95, 190);
+}
