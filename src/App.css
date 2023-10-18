@@ -84,7 +84,7 @@ button:hover {
   color: #8e8787;
 }
 
-#saveButton {
+#sgrade, #saveButton {
   background: limegreen;
   color: white;
   border: 1px solid #eeeeee;
