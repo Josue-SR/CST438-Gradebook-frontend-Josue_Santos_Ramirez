@@ -4,7 +4,7 @@ import {useHistory} from 'react-router-dom';
 
 
 function EditAssignment(props) { 
-  const [assignments, setAssignments] = useState([]);
+  const [assignment, setAssignment] = useState([]);
   const [message, setMessage] = useState('');
 
   const history = useHistory();
@@ -19,18 +19,18 @@ function EditAssignment(props) {
 
   useEffect(() => {
     // called once after intial render
-    fetchAssignments();
+    fetchAssignment();
    }, [] )
 
    console.log("ID: " +assignmentId)
 
-  const fetchAssignments = () => {
-    console.log("fetchAssignments");
+  const fetchAssignment = () => {
+    console.log("fetchAssignment");
     fetch(`${SERVER_URL}/assignment/${assignmentId}`)
     .then((response) => response.json() ) 
     .then((data) => { 
       console.log("assignment length "+data.length);
-      setAssignments(data);
+      setAssignment(data);
      }) 
     .catch(err => console.error(err)); 
   }
@@ -41,11 +41,11 @@ function EditAssignment(props) {
         {  
           method: 'PUT', 
           headers: { 'Content-Type': 'application/json', }, 
-          body: JSON.stringify( assignments )
+          body: JSON.stringify( assignment )
         } )
     .then(res => {
         if (res.ok) {
-          fetchAssignments();
+          fetchAssignment();
           setMessage("Assignment Updated.");
         } else {
           setMessage("Save error. "+res.status);
@@ -59,11 +59,11 @@ function EditAssignment(props) {
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
-    setAssignments({ ...assignments, [name]: value });
+    setAssignment({ ...assignment, [name]: value });
   };
 
   const saveAssignment = () => {
-    if(/^\d{4}-\d{2}-\d{2}$/.test(assignments.dueDate)) {
+    if(/^\d{4}-\d{2}-\d{2}$/.test(assignment.dueDate)) {
       putAssignment();
     } else {
       setMessage('Due Date has incorrect format')
@@ -77,7 +77,7 @@ function EditAssignment(props) {
       <div>
         <h3>Edit Assignment</h3>
         <div margin="auto" >
-          <h4>{message}&nbsp;</h4>
+          <h4 id="message">{message}&nbsp;</h4>
               <table className="Center"> 
                 <thead>
                   <tr>
@@ -89,7 +89,7 @@ function EditAssignment(props) {
                     <td>
                     <input
                       name="assignmentName"
-                      value={(assignments.assignmentName)? assignments.assignmentName : ""}  
+                      value={(assignment.assignmentName)? assignment.assignmentName : ""}  
                       type="text"
                       placeholder='Assignment Name'
                       onChange={(e) => onChangeInput(e)}
@@ -98,7 +98,7 @@ function EditAssignment(props) {
                     <td>
                       <input
                         name="courseTitle"
-                        value={(assignments.courseTitle)? assignments.courseTitle : ""}  
+                        value={(assignment.courseTitle)? assignment.courseTitle : ""}  
                         type="text"
                         placeholder='Course Title'
                         onChange={(e) => onChangeInput(e)}
@@ -107,7 +107,7 @@ function EditAssignment(props) {
                     <td>
                       <input
                         name="dueDate"
-                        value={(assignments.dueDate)? assignments.dueDate : ""}  
+                        value={(assignment.dueDate)? assignment.dueDate : ""}  
                         type="text"
                         placeholder='yyyy-mm-dd'
                         onChange={(e) => onChangeInput(e)}

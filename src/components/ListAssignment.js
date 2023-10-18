@@ -58,7 +58,7 @@ function ListAssignment(props) {
     <div>
       <h3>Assignments</h3>
       <div margin="auto" >
-        <h4>{message}&nbsp;</h4>
+        <h4 id="message">{message}&nbsp;</h4>
             <table className="Center"> 
               <thead>
                 <tr>
@@ -82,7 +82,7 @@ function ListAssignment(props) {
                 ))}
               </tbody>
             </table>
-            <button onClick={toAddAssignment}>Add Assignment</button>
+            <button id="addAssignment" onClick={toAddAssignment}>Add Assignment</button>
         </div>
     </div>
   )

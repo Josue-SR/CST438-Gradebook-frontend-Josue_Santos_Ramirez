@@ -4,12 +4,12 @@ import {useHistory} from 'react-router-dom';
 
 
 function AddAssignment(props) { 
-  const [assignments, setAssignments] = useState({
+  const [assignment, setAssignment] = useState({
     "id": 0,
     "assignmentName": "",
     "dueDate": "",
     "courseTitle": "",
-    "courseId": 31045
+    "courseId": ""
   });
 
   const [message, setMessage] = useState('');
@@ -25,7 +25,7 @@ function AddAssignment(props) {
         {  
           method: 'POST', 
           headers: { 'Content-Type': 'application/json', }, 
-          body: JSON.stringify( assignments )
+          body: JSON.stringify( assignment )
         } )
     .then(res => {
         if (res.ok) {
@@ -41,30 +41,32 @@ function AddAssignment(props) {
  }; 
 
  const saveAssignment = () => {
-  if(assignments.assignmentName === "" || assignments.courseTitle === "" || assignments.dueDate === "") {
+  if(assignment.assignmentName === "" || assignment.courseId === "" || assignment.dueDate === "") {
     setMessage("Inputs cannot be empty")
-  } else if(/^\d{4}-\d{2}-\d{2}$/.test(assignments.dueDate)) {
-    postAssignment();
-  } else {
+  } else if(!(/^\d{4}-\d{2}-\d{2}$/.test(assignment.dueDate))) {
     setMessage('Due Date has incorrect format')
+  } else if(!(/^\d*$/.test(assignment.courseId))){
+    setMessage('Course ID has incorrect format')
+  } else {
+    postAssignment();
   }
  }
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
-    setAssignments((prevAssignments) => ({
+    setAssignment((prevAssignments) => ({
       ...prevAssignments,
       [name]: value,
     }));
   };
 
-  const headers = ['Assignment Name', 'Course Title', 'Due Date'];
+  const headers = ['Assignment Name', 'Course ID', 'Due Date'];
 
   return (
     <div>
       <h3>Add Assignments</h3>
       <div margin="auto" >
-        <h4>{message}&nbsp;</h4>
+        <h4 id="message">{message}&nbsp;</h4>
             <table className="Center"> 
               <thead>
                 <tr>
@@ -76,7 +78,7 @@ function AddAssignment(props) {
                     <td>
                     <input
                       name="assignmentName"
-                      value={(assignments.assignmentName)? assignments.assignmentName : ""}  
+                      value={(assignment.assignmentName)? assignment.assignmentName : ""}  
                       type="text"
                       placeholder='Assignment Name'
                       onChange={(e) => onChangeInput(e)}
@@ -84,17 +86,17 @@ function AddAssignment(props) {
                     </td>
                     <td>
                       <input
-                        name="courseTitle"
-                        value={(assignments.courseTitle)? assignments.courseTitle : ""}  
+                        name="courseId"
+                        value={(assignment.courseId)? assignment.courseId : ""}  
                         type="text"
-                        placeholder='Course Title'
+                        placeholder='00001'
                         onChange={(e) => onChangeInput(e)}
                       />
                     </td>
                     <td>
                       <input
                         name="dueDate"
-                        value={(assignments.dueDate)? assignments.dueDate : ""}  
+                        value={(assignment.dueDate)? assignment.dueDate : ""}  
                         type="text"
                         placeholder='yyyy-mm-dd'
                         onChange={(e) => onChangeInput(e)}
@@ -103,7 +105,7 @@ function AddAssignment(props) {
                   </tr>
                 </tbody>
             </table>
-            <button onClick={saveAssignment}>Add Assignment</button>
+            <button id="addAssignment" onClick={saveAssignment}>Add Assignment</button>
             <button onClick={toListAssignment}>Back</button>
         </div>
     </div>
