@@ -14,6 +14,8 @@ function AddAssignment(props) {
 
   const [message, setMessage] = useState('');
 
+  const token = sessionStorage.getItem("jwt");
+
   const history = useHistory();
   const toListAssignment = () => {
     history.push('/');
@@ -24,7 +26,7 @@ function AddAssignment(props) {
     fetch(`${SERVER_URL}/assignment` , 
         {  
           method: 'POST', 
-          headers: { 'Content-Type': 'application/json', }, 
+          headers: { 'Content-Type': 'application/json', 'Authorization': token}, 
           body: JSON.stringify( assignment )
         } )
     .then(res => {

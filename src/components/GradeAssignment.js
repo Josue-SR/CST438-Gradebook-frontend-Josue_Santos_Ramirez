@@ -11,6 +11,8 @@ function GradeAssignment ( ) {
   let assignmentId=0;
   const [message, setMessage] = useState('');
 
+  const token = sessionStorage.getItem("jwt");
+
   const history = useHistory();
 
   const toListAssignment = () => {
@@ -31,7 +33,9 @@ function GradeAssignment ( ) {
   const fetchGrades = ( ) => {
       setMessage('');
       console.log("fetchGrades "+assignmentId);
-      fetch(`${SERVER_URL}/gradebook/${assignmentId}`)
+      fetch(`${SERVER_URL}/gradebook/${assignmentId}`, {
+        headers: { 'Authorization': token }
+      })
       .then((response) => response.json()) 
       .then((data) => { setGrades(data) })        
       .catch(err => { 
@@ -48,7 +52,7 @@ function GradeAssignment ( ) {
       fetch(`${SERVER_URL}/gradebook/${assignmentId}` , 
           {  
             method: 'PUT', 
-            headers: { 'Content-Type': 'application/json', }, 
+            headers: { 'Content-Type': 'application/json', 'Authorization': token }, 
             body: JSON.stringify( grades )
           } )
       .then(res => {
