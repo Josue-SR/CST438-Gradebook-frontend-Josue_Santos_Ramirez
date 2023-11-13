@@ -8,6 +8,8 @@ function ListAssignment(props) {
   const [assignments, setAssignments] = useState([]);
   const [message, setMessage] = useState('');
 
+  const token = sessionStorage.getItem("jwt");
+
   useEffect(() => {
    // called once after intial render
    fetchAssignments();
@@ -22,7 +24,9 @@ function ListAssignment(props) {
  
   const fetchAssignments = () => {
     console.log("fetchAssignments");
-    fetch(`${SERVER_URL}/assignment`)
+    fetch(`${SERVER_URL}/assignment`, {
+      headers: {'Authorization' : token}
+    })
     .then((response) => response.json() ) 
     .then((data) => { 
       console.log("assignment length "+data.length);
@@ -34,7 +38,8 @@ function ListAssignment(props) {
   const deleteAssignment = (id) => {
     setMessage('');   
     fetch(`${SERVER_URL}/assignment/${id}?force=true` , 
-        {  
+        { 
+          headers: {'Authorization' : token},
           method: 'DELETE',
         })
     .then(res => {
@@ -66,21 +71,28 @@ function ListAssignment(props) {
                 </tr>
               </thead>
               <tbody>
-                {assignments.map((row, idx) => (
-                  <tr key={idx}>
-                    <td>{row.assignmentName}</td>
-                    <td>{row.courseTitle}</td>
-                    <td>{row.dueDate}</td>
-                    <td>
-                      <Link to={`/gradeAssignment/${assignments[idx].id}`} className="link-style-grade">Grade</Link>
-                    </td>
-                    <td>
-                      <Link to={`/editAssignment/${assignments[idx].id}`} className="link-style-edit">Edit</Link>
-                    </td>
-                    <td><button id="deleteButton" onClick={() => deleteAssignment(assignments[idx].id)}>Delete</button></td>
+                {assignments.length > 0 ? (
+                  assignments.map((row, idx) => (
+                    <tr key={idx}>
+                      <td>{row.assignmentName}</td>
+                      <td>{row.courseTitle}</td>
+                      <td>{row.dueDate}</td>
+                      <td>
+                        <Link to={`/gradeAssignment/${assignments[idx].id}`} className="link-style-grade">Grade</Link>
+                      </td>
+                      <td>
+                        <Link to={`/editAssignment/${assignments[idx].id}`} className="link-style-edit">Edit</Link>
+                      </td>
+                      <td><button id="deleteButton" onClick={() => deleteAssignment(assignments[idx].id)}>Delete</button></td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3">No assignments</td>
                   </tr>
-                ))}
+                )}
               </tbody>
+
             </table>
             <button id="addAssignment" onClick={toAddAssignment}>Add Assignment</button>
         </div>
